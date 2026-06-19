@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture 3D Controller - Cube Demo</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100vh;
+        }
+        #webcam {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: 160px;
+            height: 120px;
+            z-index: 100;
+            border: 2px solid rgba(0, 255, 0, 0.2);
+            border-radius: 8px;
+            transform: rotateY(180deg);
+            object-fit: cover;
+            background: #111;
+        }
+        #info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #0f0;
+            font-size: 12px;
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 4px;
+            max-width: 300px;
+            border: 1px solid rgba(0, 255, 0, 0.2);
+        }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #0f0;
+            font-size: 20px;
+            text-align: center;
+        }
+    </style>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div class="loading">⏳ Initialisation...</div>
+    <video id="webcam" autoplay playsinline></video>
+    <div id="info">Chargement...</div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { GestureDetector, Object3DController, GestureMapper, WebcamManager } 
+            from '../src/index.js';
+
+        // ========== THREE.JS SETUP ==========
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000);
+        document.body.appendChild(renderer.domElement);
+        camera.position.z = 5;
+
+        // ========== CREATE CUBE ==========
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshPhongMaterial({ 
+            color: 0x00ff00,
+            emissive: 0x003300,
+            shininess: 100
+        });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        // ========== LIGHTING ==========
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(5, 10, 7);
+        scene.add(light);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+        // ========== GESTURE CONTROLLER ==========
+        const gestureDetector = new GestureDetector({ numHands: 1 });
+        const gestureMapper = new GestureMapper();
+        const objectController = new Object3DController(cube);
+        const webcamManager = new WebcamManager(document.getElementById('webcam'));
+
+        let isReady = false;
+        let stats = { detected: 0, missed: 0 };
+
+        // ========== INITIALIZATION ==========
+        (async () => {
+            try {
+                document.querySelector('.loading').textContent = '📡 Initialisation MediaPipe...';
+                await gestureDetector.init();
+                
+                document.querySelector('.loading').textContent = '🎥 Accès caméra...';
+                await webcamManager.start();
+                
+                gestureDetector.start();
+                isReady = true;
+                document.querySelector('.loading').style.display = 'none';
+                document.getElementById('info').textContent = '✅ PRÊT! Bouge ta main';
+            } catch (error) {
+                document.querySelector('.loading').textContent = '❌ ERREUR: ' + error.message;
+            }
+        })();
+
+        // ========== ANIMATION LOOP ==========
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (isReady && webcamManager.isActive()) {
+                const detectionResult = gestureDetector.detect(document.getElementById('webcam'));
+
+                if (detectionResult.detected) {
+                    stats.detected++;
+                    const gestureData = gestureMapper.mapGesture(detectionResult.landmarks);
+                    const gestureType = gestureMapper.detectGestureType(detectionResult.landmarks);
+                    
+                    objectController.updateFromGesture(gestureData);
+
+                    // Update info
+                    const posX = cube.position.x.toFixed(2);
+                    const posY = cube.position.y.toFixed(2);
+                    const posZ = cube.position.z.toFixed(2);
+                    const rotY = (cube.rotation.y * 180 / Math.PI).toFixed(1);
+
+                    document.getElementById('info').innerHTML = `
+                        <b>📍 POSITION</b><br>
+                        X: ${posX} | Y: ${posY} | Z: ${posZ}<br>
+                        <br>
+                        <b>🔄 ROTATION</b><br>
+                        Y: ${rotY}°<br>
+                        <br>
+                        <b>👋 GESTE</b><br>
+                        ${gestureType.type}<br>
+                        Confiance: ${(gestureType.confidence * 100).toFixed(0)}%
+                    `;
+                } else {
+                    stats.missed++;
+                    objectController.returnToCenter();
+                    document.getElementById('info').innerHTML = `
+                        <b>📍 POSITION</b><br>
+                        En retour au centre...<br>
+                        <br>
+                        <b>🔄 ROTATION</b><br>
+                        -- --<br>
+                        <br>
+                        <b>👋 GESTE</b><br>
+                        En attente de main
+                    `;
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // ========== RESPONSIVE ==========
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
