@@ -1,4 +1,4 @@
-# 🎓 Template Vanilla JS + Three.js + Gesture Control
+# 🎯 Template Vanilla JS + Three.js + Gesture Control
 
 Template de démarrage minimal pour créer une application 3D contrôlée par gestes.
 

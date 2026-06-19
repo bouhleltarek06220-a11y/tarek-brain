@@ -12,7 +12,7 @@ Des modules complets, prêts à l'emploi dans n'importe quel projet.
   - ✅ Déjà documenté
   - Status: **Production ready**
 
-### 2. 📌 **Code Snippets** (`snippets/`)
+### 2. 📋 **Code Snippets** (`snippets/`)
 Des bouts de code utiles, thématisés par domaine.
 
 - `3d-rendering/` - Optimisations Three.js
@@ -64,8 +64,8 @@ git clone https://github.com/dragonir/3d.git dragonir-3d-collection
 |-----------|--------|--------|
 | Modules | 1 | ✅ Production |
 | Snippets | À ajouter | 🔄 In Progress |
-| Projets Ext. | 2 | 📌 Catalogued |
-| Templates | À créer | 📋 Todo |
+| Projets Ext. | 2 | 📋 Catalogued |
+| Templates | À créer | 📝 Todo |
 
 ---
 
@@ -104,8 +104,8 @@ git clone https://github.com/dragonir/3d.git dragonir-3d-collection
 
 ## 🎯 Prochaines étapes
 
-- [ ] Ajouter POC_drone de Kelly Clovis
-- [ ] Cataloguer dragonir/3d
+- [x] Ajouter POC_drone de Kelly Clovis
+- [x] Cataloguer dragonir/3d
 - [ ] Créer snippets 3D
 - [ ] Créer templates React/Vue
 - [ ] Ajouter plus de projets

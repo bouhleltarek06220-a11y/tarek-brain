@@ -10,10 +10,10 @@
 
 Une collection impressionnante de **projets 3D avec Three.js** incluant:
 - 🐼 Bing Dwen Dwen (mascotte Jeux Olympiques)
-- 🏙 Ville numérique 3D
+- 🏙️ Ville numérique 3D
 - 👤 Portraits 3D
 - 🚗 Galerie de voitures
-- 🗡 The Legend of Zelda 3D
+- ⚔️ The Legend of Zelda 3D
 - Et bien d'autres...
 
 ---
@@ -92,4 +92,14 @@ Voir le dossier `../dragonir-snippets/` pour les techniques extraites:
 
 ---
 
-**Status:** 📌 À explorer et extraire des techniques
+## 🎯 Points clés à étudier
+
+1. **Organization du code** - Structure modulaire
+2. **Performance optimization** - Rendu efficace
+3. **Model loading** - Gestion des assets
+4. **Lighting & Materials** - Qualité visuelle
+5. **User interactions** - Controls fluides
+
+---
+
+**Status:** 📋 À explorer et extraire des techniques

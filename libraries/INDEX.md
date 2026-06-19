@@ -1,4 +1,4 @@
-# 📌 INDEX - Catalogue des ressources
+# 📋 INDEX - Catalogue des ressources
 
 ## 🚀 Modules Réutilisables (Production Ready)
 
@@ -28,7 +28,7 @@
 - **Stars:** ⭐⭐⭐ 2.8k
 - **Tech:** Three.js + WebGL + Canvas
 - **Cas d'usage:** Inspiration projets 3D avancés
-- **Status:** 📌 À explorer
+- **Status:** 📋 À explorer
 - **Plus:** `/libraries/external-projects/dragonir-3d/README.md`
 - **Demo:** https://dragonir.github.io/3d/
 
@@ -121,8 +121,8 @@ Quand tu trouves quelque chose:
 | **Modules** | 1 | 33% |
 | **Snippets** | 0 | 0% |
 | **Projets Ext.** | 2 | 67% |
-| **Templates** | 0 | 0% |
-| **TOTAL** | **3** | 100% |
+| **Templates** | 1 | (En progrès) |
+| **TOTAL** | **4** | 100% |
 
 ---
 
@@ -131,7 +131,7 @@ Quand tu trouves quelque chose:
 ### Court terme (cette semaine)
 - [ ] Explorer dragonir/3d en détail
 - [ ] Extraire 3-5 snippets intéressants
-- [ ] Créer template vanilla-js-3d
+- [ ] Tester le template vanilla-js-3d
 
 ### Moyen terme (ce mois)
 - [ ] Ajouter 5+ projets intéressants
